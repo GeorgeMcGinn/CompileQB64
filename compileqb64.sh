@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #QB64 Compiler -- Shell Script -- George McGinn 2021
-#Version 1.2 -- June 28, 2021
+#Version 1.0 -- June 27, 2021
 #
 # compileqb64 - script to compile QB64 source code from any directory
 #
