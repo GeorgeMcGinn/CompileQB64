@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #QB64 Compiler -- Shell Script -- George McGinn 2021
-#Version 1.0 -- June 27, 2021
+#Version 1.2 -- June 28, 2021
 #
 # compileqb64 - script to compile QB64 source code from any directory
 #
@@ -39,6 +39,17 @@
 # The process in Version 1 cannot run as ROOT and will need to be tested.
 #
 
+# FUNCTION: Test to see if the source code exists (True if the FILE exists and is a regular file (not a directory or device))
+is_file() {
+	echo $FILE
+	if [ ! -f $FILE ];    
+	then
+		echo && echo "*** ERROR: $FILE does not exist. Please fix and retry. Script Terminated."
+		exit 2
+	fi
+}
+
+### Start of script
 
 # Make sure we're not running as root (To be tested for future versions)
 if [ $EUID == "0" ]; then
@@ -79,30 +90,24 @@ else      				# Display and execute the qb64 command line compiler
 	qb64_object=$source_directory"/"$qb64_program
 	qb64_source=$source_directory"/"$qb64_program.bas
 	FILE=$qb64_source
-	if [ -f $FILE ];    # Test to see if the source code exists (True if the FILE exists and is a regular file (not a directory or device).)
-	then
-		echo
-		echo "Compiler Options: "$compiler_options
-		echo "Source Code Directory: "$source_directory
-		echo "Object Filename: "$qb64_object
-		echo "Source Code Filename: "$qb64_source
-		echo 
-		echo "qb64 -x $compiler_options -o $qb64_object $qb64_source"
-		echo
-		echo "Compiling "$qb64_source" ..."
-		qb64 -x "$compiler_options" -o "$qb64_object" "$qb64_source"
-		if [ $? != 0 ];     # Check for successful completion and display appropriate message
-		then   
-			echo ""
-			echo "*** ERROR: Program did not compile successfully. Please fix and retry. Script Terminated."
-			exit 1
-		else
-			echo
-			echo "Program \"$qb64_program.bas\" compiled successfully."
-		fi
-	else
-		echo && echo "*** ERROR: $FILE does not exist. Please fix and retry. Script Terminated."
+	is_file "$FILE"     # Check to make sure directory/file exists and is readable (not a device or directory only)
+	echo
+	echo "Compiler Options: "$compiler_options
+	echo "Source Code Directory: "$source_directory
+	echo "Object Filename: "$qb64_object
+	echo "Source Code Filename: "$qb64_source
+	echo 
+	echo "qb64 -x $compiler_options -o $qb64_object $qb64_source"
+	echo
+	echo "Compiling "$qb64_source" ..."
+	qb64 -x "$compiler_options" -o "$qb64_object" "$qb64_source"
+	if [ $? != 0 ];     # Check for successful completion and display appropriate message
+	then   
+		echo ""
+		echo "*** ERROR: Program did not compile successfully. Please fix and retry. Script Terminated."
 		exit 1
+	else
+		echo
+		echo "Program \"$qb64_program.bas\" compiled successfully."
 	fi
 fi
-
