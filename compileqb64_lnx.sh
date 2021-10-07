@@ -2,6 +2,7 @@
 
 #QB64 Compiler -- Shell Script -- George McGinn 2021
 #Version 1.5 -- June 28, 2021
+#License: GNU General Public License v3.0
 #
 # compileqb64 - script to compile QB64 source code from any directory
 #
@@ -38,6 +39,7 @@
 #
 # The process in Version 1.x cannot run as ROOT and will need to be tested.
 #
+
 
 # FUNCTION: Test to see if the source code exists (True if the FILE exists and is a regular file (not a directory or device))
 is_file() {
